@@ -4,6 +4,7 @@ import Header from '@/components/dashboard/Header';
 import Navigation from '@/components/dashboard/Navigation';
 import TabsContentComponent from '@/components/dashboard/TabsContent';
 import DialogsManager from '@/components/dashboard/DialogsManager';
+import PageNavigation from '@/components/ui/navigation';
 import { useIndexState } from '@/hooks/useIndexState';
 
 const Index = () => {
@@ -32,6 +33,7 @@ const Index = () => {
       <Header />
 
       <main className="max-w-7xl mx-auto p-6">
+        <PageNavigation showBack={false} />
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <Navigation activeTab={activeTab} />
 
