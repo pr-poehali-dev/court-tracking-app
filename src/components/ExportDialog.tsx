@@ -6,7 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { Checkbox } from '@/components/ui/checkbox';
 import Icon from '@/components/ui/icon';
+import SignatureLibrary from '@/components/SignatureLibrary';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel } from 'docx';
@@ -24,6 +26,11 @@ const ExportDialog = ({ isOpen, onClose, template, formData }: ExportDialogProps
   const [documentStyle, setDocumentStyle] = useState('standard');
   const [paperSize, setPaperSize] = useState('A4');
   const [isExporting, setIsExporting] = useState(false);
+  const [includeSignature, setIncludeSignature] = useState(false);
+  const [includeSeal, setIncludeSeal] = useState(false);
+  const [selectedSignature, setSelectedSignature] = useState<any>(null);
+  const [selectedSeal, setSelectedSeal] = useState<any>(null);
+  const [isSignatureLibraryOpen, setIsSignatureLibraryOpen] = useState(false);
 
   const documentStyles = [
     {
@@ -149,7 +156,17 @@ const ExportDialog = ({ isOpen, onClose, template, formData }: ExportDialogProps
           content += `${field.label}: ${value}\n`;
         });
         content += `\nДата: ${new Date().toLocaleDateString('ru-RU')}\n`;
-        content += `Подпись: ________________`;
+        
+        // Добавляем место для подписи и печати
+        if (includeSignature && selectedSignature) {
+          content += `\n${selectedSignature.position}: ________________ ${selectedSignature.name}`;
+        } else {
+          content += `Подпись: ________________`;
+        }
+        
+        if (includeSeal && selectedSeal) {
+          content += `\n\nМ.П. (${selectedSeal.name})`;
+        }
     }
 
     return content;
@@ -351,6 +368,92 @@ const ExportDialog = ({ isOpen, onClose, template, formData }: ExportDialogProps
                 </SelectContent>
               </Select>
             </div>
+
+            <Separator />
+
+            <div>
+              <h3 className="text-lg font-semibold mb-4">Подписи и печати</h3>
+              <div className="space-y-4">
+                <div className="flex items-start space-x-3">
+                  <Checkbox 
+                    id="include-signature"
+                    checked={includeSignature}
+                    onCheckedChange={setIncludeSignature}
+                  />
+                  <div className="flex-1">
+                    <Label htmlFor="include-signature" className="font-medium cursor-pointer">
+                      Добавить подпись
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Автоматическая вставка электронной подписи
+                    </p>
+                    {includeSignature && (
+                      <div className="mt-2">
+                        {selectedSignature ? (
+                          <Card className="p-3">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="font-medium">{selectedSignature.name}</div>
+                                <div className="text-sm text-muted-foreground">{selectedSignature.position}</div>
+                              </div>
+                              <Button variant="outline" size="sm" onClick={() => setIsSignatureLibraryOpen(true)}>
+                                Изменить
+                              </Button>
+                            </div>
+                          </Card>
+                        ) : (
+                          <Button variant="outline" onClick={() => setIsSignatureLibraryOpen(true)}>
+                            <Icon name="PenTool" size={16} className="mr-2" />
+                            Выбрать подпись
+                          </Button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-3">
+                  <Checkbox 
+                    id="include-seal"
+                    checked={includeSeal}
+                    onCheckedChange={setIncludeSeal}
+                  />
+                  <div className="flex-1">
+                    <Label htmlFor="include-seal" className="font-medium cursor-pointer">
+                      Добавить печать
+                    </Label>
+                    <p className="text-sm text-muted-foreground">
+                      Вставка официальной печати организации
+                    </p>
+                    {includeSeal && (
+                      <div className="mt-2">
+                        {selectedSeal ? (
+                          <Card className="p-3">
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <div className="font-medium">{selectedSeal.name}</div>
+                                <div className="text-sm text-muted-foreground">
+                                  {selectedSeal.type === 'round' ? 'Круглая' : 'Прямоугольная'} • 
+                                  {selectedSeal.size === 'large' ? 'Большой' : selectedSeal.size === 'medium' ? 'Средний' : 'Малый'}
+                                </div>
+                              </div>
+                              <Button variant="outline" size="sm" onClick={() => setIsSignatureLibraryOpen(true)}>
+                                Изменить
+                              </Button>
+                            </div>
+                          </Card>
+                        ) : (
+                          <Button variant="outline" onClick={() => setIsSignatureLibraryOpen(true)}>
+                            <Icon name="Stamp" size={16} className="mr-2" />
+                            Выбрать печать
+                          </Button>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Предварительный просмотр */}
@@ -392,6 +495,20 @@ const ExportDialog = ({ isOpen, onClose, template, formData }: ExportDialogProps
             )}
           </Button>
         </div>
+
+        {/* Библиотека подписей и печатей */}
+        <SignatureLibrary
+          isOpen={isSignatureLibraryOpen}
+          onClose={() => setIsSignatureLibraryOpen(false)}
+          onSelectSignature={(signature) => {
+            setSelectedSignature(signature);
+            setIncludeSignature(true);
+          }}
+          onSelectSeal={(seal) => {
+            setSelectedSeal(seal);
+            setIncludeSeal(true);
+          }}
+        />
       </DialogContent>
     </Dialog>
   );

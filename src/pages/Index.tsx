@@ -13,6 +13,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 import ExportDialog from '@/components/ExportDialog';
+import SignatureLibrary from '@/components/SignatureLibrary';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -21,6 +22,7 @@ const Index = () => {
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
   const [templateFormData, setTemplateFormData] = useState<Record<string, string>>({});
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
+  const [isSignatureLibraryOpen, setIsSignatureLibraryOpen] = useState(false);
 
   // Мок данные
   const cases = [
@@ -929,6 +931,41 @@ const Index = () => {
 
               <Card className="card-hover">
                 <CardHeader>
+                  <CardTitle>Подписи и печати</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-semibold">Библиотека подписей</h4>
+                      <p className="text-sm text-muted-foreground">Управление цифровыми подписями</p>
+                    </div>
+                    <Button variant="outline" onClick={() => setIsSignatureLibraryOpen(true)}>
+                      <Icon name="PenTool" size={16} className="mr-2" />
+                      Открыть
+                    </Button>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-semibold">Официальные печати</h4>
+                      <p className="text-sm text-muted-foreground">Настройка печатей организации</p>
+                    </div>
+                    <Button variant="outline" onClick={() => setIsSignatureLibraryOpen(true)}>
+                      <Icon name="Stamp" size={16} className="mr-2" />
+                      Управление
+                    </Button>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="font-semibold">Автоматическая вставка</h4>
+                      <p className="text-sm text-muted-foreground">Вставлять подписи в документы автоматически</p>
+                    </div>
+                    <Button variant="outline">Включить</Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="card-hover">
+                <CardHeader>
                   <CardTitle>Интеграции</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -1020,6 +1057,12 @@ const Index = () => {
           onClose={() => setIsExportDialogOpen(false)}
           template={selectedTemplate}
           formData={templateFormData}
+        />
+
+        {/* Библиотека подписей и печатей */}
+        <SignatureLibrary
+          isOpen={isSignatureLibraryOpen}
+          onClose={() => setIsSignatureLibraryOpen(false)}
         />
       </main>
     </div>
