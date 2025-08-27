@@ -32,11 +32,11 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <main className="max-w-7xl mx-auto p-6">
+      <Navigation activeTab={activeTab} />
+      
+      <main className="ml-64 p-6">
         <PageNavigation showBack={false} />
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <Navigation activeTab={activeTab} />
-
           <TabsContentComponent
             selectedDate={selectedDate}
             onSelectDate={setSelectedDate}
