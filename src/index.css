@@ -16,7 +16,7 @@
     --popover-foreground: 15 23 42;
 
     --primary: 37 99 235;
-    --primary-foreground: 30 58 138;
+    --primary-foreground: 248 250 252;
 
     --secondary: 241 245 249;
     --secondary-foreground: 51 65 85;
@@ -25,10 +25,10 @@
     --muted-foreground: 100 116 139;
 
     --accent: 217 119 6;
-    --accent-foreground: 30 58 138;
+    --accent-foreground: 248 250 252;
 
     --destructive: 220 38 38;
-    --destructive-foreground: 30 58 138;
+    --destructive-foreground: 248 250 252;
 
     --border: 226 232 240;
     --input: 226 232 240;

@@ -27,7 +27,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab }) => {
   ];
 
   return (
-    <div className="fixed left-0 top-0 h-full w-64 bg-white border-r border-slate-200 overflow-y-auto z-40">
+    <div className="fixed left-0 top-[112px] h-[calc(100vh-112px)] w-64 bg-white border-r border-slate-200 overflow-y-auto z-40">
       <div className="p-4">
         <h2 className="text-lg font-semibold text-slate-800 mb-4">Дашборд</h2>
         <TabsList className="flex flex-col w-full h-auto bg-transparent p-0">
