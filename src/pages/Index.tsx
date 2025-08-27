@@ -4,7 +4,6 @@ import Header from '@/components/dashboard/Header';
 import Navigation from '@/components/dashboard/Navigation';
 import TabsContentComponent from '@/components/dashboard/TabsContent';
 import DialogsManager from '@/components/dashboard/DialogsManager';
-import PageNavigation from '@/components/ui/navigation';
 import { useIndexState } from '@/hooks/useIndexState';
 
 const Index = () => {
@@ -32,11 +31,10 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
 
-      <Navigation activeTab={activeTab} />
-      
-      <main className="ml-64 p-6">
-        <PageNavigation showBack={false} />
+      <main className="max-w-7xl mx-auto p-6">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <Navigation activeTab={activeTab} />
+
           <TabsContentComponent
             selectedDate={selectedDate}
             onSelectDate={setSelectedDate}

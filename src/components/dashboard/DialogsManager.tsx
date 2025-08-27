@@ -1,4 +1,7 @@
 import React from 'react';
+import ExportDialog from '@/components/ExportDialog';
+import SignatureLibrary from '@/components/SignatureLibrary';
+import DocumentHistory from '@/components/DocumentHistory';
 import { DocumentTemplate } from './types';
 
 interface DialogsManagerProps {
@@ -23,9 +26,24 @@ const DialogsManager: React.FC<DialogsManagerProps> = ({
   templateFormData
 }) => {
   return (
-    <div>
-      {/* Диалоги временно отключены */}
-    </div>
+    <>
+      <ExportDialog
+        isOpen={isExportDialogOpen}
+        onClose={onExportDialogClose}
+        template={selectedTemplate}
+        formData={templateFormData}
+      />
+
+      <SignatureLibrary
+        isOpen={isSignatureLibraryOpen}
+        onClose={onSignatureLibraryClose}
+      />
+
+      <DocumentHistory
+        isOpen={isDocumentHistoryOpen}
+        onClose={onDocumentHistoryClose}
+      />
+    </>
   );
 };
 

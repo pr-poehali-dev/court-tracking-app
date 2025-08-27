@@ -27,23 +27,14 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab }) => {
   ];
 
   return (
-    <div className="fixed left-0 top-[112px] h-[calc(100vh-112px)] w-64 bg-white border-r border-slate-200 overflow-y-auto z-40">
-      <div className="p-4">
-        <h2 className="text-lg font-semibold text-slate-800 mb-4">Дашборд</h2>
-        <TabsList className="flex flex-col w-full h-auto bg-transparent p-0">
-          {navigationItems.map((item) => (
-            <TabsTrigger 
-              key={item.value} 
-              value={item.value} 
-              className="w-full justify-start p-3 mb-1 text-left data-[state=active]:bg-blue-50 data-[state=active]:text-blue-700 hover:bg-slate-50"
-            >
-              <Icon name={item.icon as any} size={18} className="mr-3" />
-              {item.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </div>
-    </div>
+    <TabsList className="grid w-full grid-cols-16 mb-8">
+      {navigationItems.map((item) => (
+        <TabsTrigger key={item.value} value={item.value} className="flex items-center">
+          <Icon name={item.icon as any} size={16} className="mr-2" />
+          {item.label}
+        </TabsTrigger>
+      ))}
+    </TabsList>
   );
 };
 
