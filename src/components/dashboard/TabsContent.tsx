@@ -3,6 +3,7 @@ import { TabsContent } from '@/components/ui/tabs';
 import DashboardTab from './DashboardTab';
 import CasesTab from './CasesTab';
 import ClientsTab from './ClientsTab';
+import BillingTab from './BillingTab';
 import CalendarTab from './CalendarTab';
 import DocumentsTab from './DocumentsTab';
 import TemplatesTab from './TemplatesTab';
@@ -48,6 +49,10 @@ const TabsContentComponent: React.FC<TabsContentProps> = ({
 
       <TabsContent value="clients">
         <ClientsTab />
+      </TabsContent>
+
+      <TabsContent value="billing">
+        <BillingTab />
       </TabsContent>
 
       <TabsContent value="calendar">
