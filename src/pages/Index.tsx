@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
+import ExportDialog from '@/components/ExportDialog';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -19,6 +20,7 @@ const Index = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<any>(null);
   const [isTemplateDialogOpen, setIsTemplateDialogOpen] = useState(false);
   const [templateFormData, setTemplateFormData] = useState<Record<string, string>>({});
+  const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
 
   // Мок данные
   const cases = [
@@ -233,10 +235,8 @@ const Index = () => {
   };
 
   const generateDocument = () => {
-    // Здесь будет логика генерации документа
-    console.log('Генерация документа:', selectedTemplate?.title, templateFormData);
     setIsTemplateDialogOpen(false);
-    // Можно добавить уведомление об успешной генерации
+    setIsExportDialogOpen(true);
   };
 
   const getStatusColor = (status: string) => {
@@ -1013,6 +1013,14 @@ const Index = () => {
             </div>
           </TabsContent>
         </Tabs>
+
+        {/* Диалог экспорта документа */}
+        <ExportDialog
+          isOpen={isExportDialogOpen}
+          onClose={() => setIsExportDialogOpen(false)}
+          template={selectedTemplate}
+          formData={templateFormData}
+        />
       </main>
     </div>
   );
