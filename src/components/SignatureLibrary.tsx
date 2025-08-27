@@ -10,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import Icon from '@/components/ui/icon';
+import SignatureTemplates from '@/components/SignatureTemplates';
 
 interface SignatureLibraryProps {
   isOpen: boolean;
@@ -22,6 +23,7 @@ const SignatureLibrary = ({ isOpen, onClose, onSelectSignature, onSelectSeal }: 
   const [activeTab, setActiveTab] = useState('signatures');
   const [isCreateSignatureOpen, setIsCreateSignatureOpen] = useState(false);
   const [isCreateSealOpen, setIsCreateSealOpen] = useState(false);
+  const [isSignatureTemplatesOpen, setIsSignatureTemplatesOpen] = useState(false);
   const [signatureFormData, setSignatureFormData] = useState({
     name: '',
     position: '',
@@ -136,7 +138,7 @@ const SignatureLibrary = ({ isOpen, onClose, onSelectSignature, onSelectSeal }: 
         </DialogHeader>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="signatures" className="flex items-center">
               <Icon name="PenTool" size={16} className="mr-2" />
               Подписи
@@ -144,6 +146,10 @@ const SignatureLibrary = ({ isOpen, onClose, onSelectSignature, onSelectSeal }: 
             <TabsTrigger value="seals" className="flex items-center">
               <Icon name="Stamp" size={16} className="mr-2" />
               Печати
+            </TabsTrigger>
+            <TabsTrigger value="templates" className="flex items-center">
+              <Icon name="Layout" size={16} className="mr-2" />
+              Шаблоны
             </TabsTrigger>
           </TabsList>
 
@@ -413,7 +419,136 @@ const SignatureLibrary = ({ isOpen, onClose, onSelectSignature, onSelectSeal }: 
               ))}
             </div>
           </TabsContent>
+
+          {/* Шаблоны расположения */}
+          <TabsContent value="templates" className="space-y-4 max-h-[70vh] overflow-y-auto">
+            <div className="flex justify-between items-center">
+              <div>
+                <h3 className="text-lg font-semibold">Шаблоны расположения подписей</h3>
+                <p className="text-sm text-muted-foreground">Управление позиционированием в документах</p>
+              </div>
+              <Button onClick={() => setIsSignatureTemplatesOpen(true)}>
+                <Icon name="Layout" size={16} className="mr-2" />
+                Управление шаблонами
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {/* Быстрые шаблоны */}
+              {[
+                {
+                  id: '1',
+                  name: 'Стандартный договор',
+                  description: 'Подпись справа, печать слева',
+                  documentType: 'Договор',
+                  positions: 2,
+                  isDefault: true
+                },
+                {
+                  id: '2',
+                  name: 'Исковое заявление',
+                  description: 'Подпись заявителя внизу',
+                  documentType: 'Исковое заявление',
+                  positions: 1,
+                  isDefault: true
+                },
+                {
+                  id: '3',
+                  name: 'Трудовой договор',
+                  description: 'Две подписи + печать HR',
+                  documentType: 'Трудовой договор',
+                  positions: 3,
+                  isDefault: true
+                }
+              ].map((template) => (
+                <Card key={template.id} className="cursor-pointer hover:shadow-md transition-shadow">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between">
+                      <CardTitle className="text-sm flex items-center gap-2">
+                        {template.name}
+                        {template.isDefault && (
+                          <Badge variant="secondary" className="text-xs">По умолчанию</Badge>
+                        )}
+                      </CardTitle>
+                    </div>
+                    <p className="text-xs text-muted-foreground">{template.description}</p>
+                  </CardHeader>
+                  
+                  <CardContent className="space-y-3">
+                    {/* Превью шаблона */}
+                    <div className="relative bg-gray-50 rounded h-16 border">
+                      <div className="absolute inset-1 bg-white rounded border">
+                        {/* Примеры позиций */}
+                        {template.id === '1' && (
+                          <>
+                            <div className="absolute bottom-1 right-1 w-4 h-2 bg-blue-200 border border-blue-400 rounded text-xs"></div>
+                            <div className="absolute bottom-1 left-1 w-3 h-3 bg-green-200 border border-green-400 rounded-full"></div>
+                          </>
+                        )}
+                        {template.id === '2' && (
+                          <div className="absolute bottom-1 right-2 w-5 h-1 bg-blue-200 border border-blue-400 rounded"></div>
+                        )}
+                        {template.id === '3' && (
+                          <>
+                            <div className="absolute bottom-1 left-1 w-3 h-1 bg-blue-200 border border-blue-400 rounded"></div>
+                            <div className="absolute bottom-1 right-1 w-3 h-1 bg-blue-200 border border-blue-400 rounded"></div>
+                            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-green-200 border border-green-400 rounded-full"></div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between text-xs text-muted-foreground">
+                      <span>{template.documentType}</span>
+                      <span>{template.positions} позиций</span>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button variant="outline" size="sm" className="flex-1">
+                        <Icon name="Eye" size={12} className="mr-1" />
+                        Применить
+                      </Button>
+                      <Button variant="outline" size="sm">
+                        <Icon name="Copy" size={12} />
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <Card className="mt-4">
+              <CardHeader>
+                <CardTitle className="text-sm">Быстрые действия</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <Button variant="outline" className="h-auto p-4 flex-col gap-2">
+                    <Icon name="Plus" size={20} />
+                    <div className="text-center">
+                      <div className="font-medium">Создать новый шаблон</div>
+                      <div className="text-xs text-muted-foreground">Настройте расположение подписей</div>
+                    </div>
+                  </Button>
+                  
+                  <Button variant="outline" className="h-auto p-4 flex-col gap-2">
+                    <Icon name="Import" size={20} />
+                    <div className="text-center">
+                      <div className="font-medium">Импорт шаблона</div>
+                      <div className="text-xs text-muted-foreground">Загрузить из файла</div>
+                    </div>
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
+
+        {/* Компонент управления шаблонами */}
+        <SignatureTemplates
+          isOpen={isSignatureTemplatesOpen}
+          onClose={() => setIsSignatureTemplatesOpen(false)}
+        />
       </DialogContent>
     </Dialog>
   );

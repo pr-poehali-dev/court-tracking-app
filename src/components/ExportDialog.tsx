@@ -28,6 +28,7 @@ const ExportDialog = ({ isOpen, onClose, template, formData }: ExportDialogProps
   const [isExporting, setIsExporting] = useState(false);
   const [includeSignature, setIncludeSignature] = useState(false);
   const [includeSeal, setIncludeSeal] = useState(false);
+  const [selectedSignatureTemplate, setSelectedSignatureTemplate] = useState<string>('');
   const [selectedSignature, setSelectedSignature] = useState<any>(null);
   const [selectedSeal, setSelectedSeal] = useState<any>(null);
   const [isSignatureLibraryOpen, setIsSignatureLibraryOpen] = useState(false);
@@ -411,6 +412,62 @@ const ExportDialog = ({ isOpen, onClose, template, formData }: ExportDialogProps
                     )}
                   </div>
                 </div>
+
+                {/* Шаблон расположения подписей */}
+                {(includeSignature || includeSeal) && (
+                  <div className="space-y-3 pt-3 border-t">
+                    <Label className="font-medium">Расположение в документе</Label>
+                    <Select value={selectedSignatureTemplate} onValueChange={setSelectedSignatureTemplate}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Выберите шаблон расположения" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="auto">Автоматическое размещение</SelectItem>
+                        <SelectItem value="standard-contract">Стандартный договор</SelectItem>
+                        <SelectItem value="legal-statement">Исковое заявление</SelectItem>
+                        <SelectItem value="employment-contract">Трудовой договор</SelectItem>
+                        <SelectItem value="custom">Пользовательское размещение</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    
+                    {selectedSignatureTemplate && (
+                      <div className="p-3 bg-muted/50 rounded-lg">
+                        <div className="text-sm">
+                          {selectedSignatureTemplate === 'standard-contract' && (
+                            <div>
+                              <div className="font-medium mb-1">Стандартный договор</div>
+                              <div className="text-muted-foreground">Подпись в правом нижнем углу, печать слева от подписи</div>
+                            </div>
+                          )}
+                          {selectedSignatureTemplate === 'legal-statement' && (
+                            <div>
+                              <div className="font-medium mb-1">Исковое заявление</div>
+                              <div className="text-muted-foreground">Подпись заявителя в конце документа справа</div>
+                            </div>
+                          )}
+                          {selectedSignatureTemplate === 'employment-contract' && (
+                            <div>
+                              <div className="font-medium mb-1">Трудовой договор</div>
+                              <div className="text-muted-foreground">Подписи сторон и печать HR-отдела</div>
+                            </div>
+                          )}
+                          {selectedSignatureTemplate === 'auto' && (
+                            <div>
+                              <div className="font-medium mb-1">Автоматическое размещение</div>
+                              <div className="text-muted-foreground">Система автоматически определит оптимальное расположение</div>
+                            </div>
+                          )}
+                          {selectedSignatureTemplate === 'custom' && (
+                            <div>
+                              <div className="font-medium mb-1">Пользовательское размещение</div>
+                              <div className="text-muted-foreground">Вы сможете вручную указать позиции после экспорта</div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
 
                 <div className="flex items-start space-x-3">
                   <Checkbox 
