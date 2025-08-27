@@ -11,6 +11,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab }) => {
     { value: 'dashboard', icon: 'BarChart3', label: 'Дашборд' },
     { value: 'cases', icon: 'Scale', label: 'Дела' },
     { value: 'clients', icon: 'Users', label: 'Клиенты' },
+    { value: 'lawyers', icon: 'UserCheck', label: 'Юристы' },
     { value: 'billing', icon: 'CreditCard', label: 'Биллинг' },
     { value: 'expenses', icon: 'Receipt', label: 'Расходы' },
     { value: 'calendar', icon: 'Calendar', label: 'Календарь' },
@@ -24,7 +25,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab }) => {
   ];
 
   return (
-    <TabsList className="grid w-full grid-cols-13 mb-8">
+    <TabsList className="grid w-full grid-cols-14 mb-8">
       {navigationItems.map((item) => (
         <TabsTrigger key={item.value} value={item.value} className="flex items-center">
           <Icon name={item.icon as any} size={16} className="mr-2" />
