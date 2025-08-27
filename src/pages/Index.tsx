@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import Icon from '@/components/ui/icon';
 import ExportDialog from '@/components/ExportDialog';
 import SignatureLibrary from '@/components/SignatureLibrary';
+import DocumentHistory from '@/components/DocumentHistory';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -23,6 +24,7 @@ const Index = () => {
   const [templateFormData, setTemplateFormData] = useState<Record<string, string>>({});
   const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
   const [isSignatureLibraryOpen, setIsSignatureLibraryOpen] = useState(false);
+  const [isDocumentHistoryOpen, setIsDocumentHistoryOpen] = useState(false);
 
   // Мок данные
   const cases = [
@@ -307,6 +309,10 @@ const Index = () => {
               <Icon name="FileText" size={16} className="mr-2" />
               Документы
             </TabsTrigger>
+            <TabsTrigger value="history" className="flex items-center">
+              <Icon name="History" size={16} className="mr-2" />
+              История
+            </TabsTrigger>
             <TabsTrigger value="templates" className="flex items-center">
               <Icon name="FileCheck" size={16} className="mr-2" />
               Шаблоны
@@ -355,7 +361,7 @@ const Index = () => {
                 </CardContent>
               </Card>
 
-              <Card className="card-hover">
+              <Card className="card-hover cursor-pointer" onClick={() => setIsDocumentHistoryOpen(true)}>
                 <CardHeader className="flex flex-row items-center justify-between pb-2">
                   <CardTitle className="text-sm font-medium">Документы</CardTitle>
                   <Icon name="FileText" size={20} className="text-green-600" />
@@ -1049,6 +1055,144 @@ const Index = () => {
               </Card>
             </div>
           </TabsContent>
+
+          {/* История документов */}
+          <TabsContent value="history" className="space-y-6 fade-in">
+            <div className="flex items-center justify-between">
+              <h2 className="text-2xl font-bold">История документов</h2>
+              <Button onClick={() => setIsDocumentHistoryOpen(true)}>
+                <Icon name="History" size={16} className="mr-2" />
+                Открыть полную историю
+              </Button>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Быстрая статистика */}
+              <Card className="card-hover">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Icon name="FileText" size={20} className="mr-2 text-blue-600" />
+                    Недавние документы
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Договор аренды</span>
+                    <Badge className="bg-green-100 text-green-700">Готов</Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Исковое заявление</span>
+                    <Badge className="bg-blue-100 text-blue-700">Отправлен</Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm">Трудовой договор</span>
+                    <Badge className="bg-gray-100 text-gray-700">Черновик</Badge>
+                  </div>
+                  <Button variant="outline" size="sm" className="w-full mt-2" onClick={() => setIsDocumentHistoryOpen(true)}>
+                    Показать все
+                  </Button>
+                </CardContent>
+              </Card>
+
+              <Card className="card-hover">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Icon name="TrendingUp" size={20} className="mr-2 text-green-600" />
+                    Статистика за месяц
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-sm">Создано документов:</span>
+                    <span className="font-semibold">12</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Завершено:</span>
+                    <span className="font-semibold">8</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">В работе:</span>
+                    <span className="font-semibold">4</span>
+                  </div>
+                  <div className="pt-2">
+                    <div className="text-xs text-muted-foreground mb-1">Прогресс</div>
+                    <Progress value={67} className="h-2" />
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="card-hover">
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Icon name="Users" size={20} className="mr-2 text-purple-600" />
+                    По клиентам
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex justify-between">
+                    <span className="text-sm">ООО "Альфа"</span>
+                    <span className="text-xs text-muted-foreground">5 док.</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Иванов И.И.</span>
+                    <span className="text-xs text-muted-foreground">3 док.</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">ИП Петров</span>
+                    <span className="text-xs text-muted-foreground">2 док.</span>
+                  </div>
+                  <Button variant="outline" size="sm" className="w-full mt-2">
+                    <Icon name="BarChart3" size={16} className="mr-2" />
+                    Подробная статистика
+                  </Button>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Последние документы */}
+            <Card className="card-hover">
+              <CardHeader>
+                <CardTitle>Недавно созданные документы</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {[
+                    { title: 'Договор аренды офисного помещения', client: 'ООО "Альфа"', date: '25.08.2024', status: 'completed' },
+                    { title: 'Исковое заявление о взыскании долга', client: 'Иванов И.И.', date: '22.08.2024', status: 'sent' },
+                    { title: 'Трудовой договор с менеджером', client: 'ИП Петров', date: '26.08.2024', status: 'draft' },
+                    { title: 'Устав ООО "Новые технологии"', client: 'ООО "Новые технологии"', date: '20.08.2024', status: 'completed' }
+                  ].map((doc, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50">
+                      <div className="flex-1">
+                        <div className="font-medium">{doc.title}</div>
+                        <div className="text-sm text-muted-foreground">{doc.client} • {doc.date}</div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Badge className={
+                          doc.status === 'completed' ? 'bg-green-100 text-green-700' :
+                          doc.status === 'sent' ? 'bg-blue-100 text-blue-700' :
+                          'bg-gray-100 text-gray-700'
+                        }>
+                          {doc.status === 'completed' ? 'Готов' : 
+                           doc.status === 'sent' ? 'Отправлен' : 'Черновик'}
+                        </Badge>
+                        <Button variant="ghost" size="sm">
+                          <Icon name="Eye" size={16} />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                
+                <div className="flex justify-center mt-4">
+                  <Button variant="outline" onClick={() => setIsDocumentHistoryOpen(true)}>
+                    <Icon name="History" size={16} className="mr-2" />
+                    Открыть полную историю
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
         </Tabs>
 
         {/* Диалог экспорта документа */}
@@ -1063,6 +1207,12 @@ const Index = () => {
         <SignatureLibrary
           isOpen={isSignatureLibraryOpen}
           onClose={() => setIsSignatureLibraryOpen(false)}
+        />
+
+        {/* История документов */}
+        <DocumentHistory
+          isOpen={isDocumentHistoryOpen}
+          onClose={() => setIsDocumentHistoryOpen(false)}
         />
       </main>
     </div>
